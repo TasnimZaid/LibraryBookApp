@@ -2,12 +2,12 @@ import React from "react";
 
 function ResultDisplay({ book, handleRemove }) {
   return (
-    <div className="result" style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-      <h3 style={{ marginBottom: "5px" }}>{book.title}</h3>
-      <p>Author: {book.author}</p>
-      <p>ISBN: {book.isbn}</p>
+    <div className="result border border-gray-300 rounded-lg p-4 mb-4 w-64 h-80 relative ">
+      <h3 className="mb-2 font-bold text-">{book.title}</h3>
+      <p className="text-sm text- mb-2">Author: {book.author}</p>
+      <p className="text-sm text- mb-4">ISBN: {book.isbn}</p>
       <button
-        style={{ backgroundColor: "#dc3545", color: "#fff", border: "none", padding: "5px 10px", cursor: "pointer" }}
+        className="absolute bottom-4 left-4 bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer"
         onClick={() => handleRemove(book.id)}
       >
         Remove

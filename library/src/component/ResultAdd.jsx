@@ -33,7 +33,7 @@ const booksData = [
 function ResultAdd() {
   
   const [fetchedData, setFetchedData] = useState([]);
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,23 +50,23 @@ function ResultAdd() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const handlePost = async () => {
-      try {
-        await instance.post("/Book.json", booksData);
-        console.log("Data posted successfully!");
-      } catch (error) {
-        console.error("Error posting data:", error);
-      }
-    };
-    handlePost();
-  }, []);
+  // useEffect(() => {
+  //   const handlePost = async () => {
+  //     try {
+  //       await instance.post("/Book.json", booksData);
+  //       console.log("Data posted successfully!");
+  //     } catch (error) {
+  //       console.error("Error posting data:", error);
+  //     }
+  //   };
+  //   handlePost();
+  // }, []);
 
 
 
 
 
-   // Post data to Firebase
+  //  Post data to Firebase
 //  useEffect(() => {
 //     const handlePost = async () => {
 //       const existingBooks = fetchedData.map(book => book.id);
@@ -106,12 +106,32 @@ function ResultAdd() {
       console.error("Error deleting book:", error);
     }
   };
+  // const handlesoftDelete = async (id) => {
+  //   if (!id) {
+  //     console.log("Invalid ID");
+  //     return;
+  //   }
+
+  //   try {
+  //     await instance.put(`/Book/${id}.json`, { deleted: true });
+
+  //     setFetchedData(prevData => prevData.map(book =>
+  //       book.id === id ? { ...book, deleted: true } : book
+  //     ));
+  //   } catch (error) {
+  //     console.error("Error occurred during soft delete", error);
+  //   }
+  // };
+
+ 
 
   return (
-    <div>
+    <div >
       <ResultList results={fetchedData} handleRemove={handleRemove} />
     </div>
   );
 }
 
 export default ResultAdd;
+
+

@@ -7,7 +7,7 @@ function ResultList({ results , handleRemove }) {
 
       
   return (
-    <div>
+    <div className="flex flex-wrap  ">
       {results.map((book) => (
         <ResultDisplay book={book} key={book.id} handleRemove={handleRemove}  />
       ))}
