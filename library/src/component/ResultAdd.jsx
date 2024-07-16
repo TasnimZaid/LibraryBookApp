@@ -67,38 +67,40 @@ function ResultAdd() {
 
 
   //  Post data to Firebase
-//  useEffect(() => {
-//     const handlePost = async () => {
-//       const existingBooks = fetchedData.map(book => book.id);
-//       const postPromises = booksData.map(book => {
-//         if (!existingBooks.includes(book.id.toString())) {
-//           return instance.post("Book.json", {
-//             title: book.title,
-//             author: book.author,
-//             isbn: book.isbn,
-//           });
-//         }
-//         return Promise.resolve(); // Skip posting if already exists
-//       });
+ 
+    // const handlePost = async () => {
+    //   const existingBooks = fetchedData.map(book => book.id);
+    //   const postPromises = booksData.map(book => {
+    //     if (!existingBooks.includes(book.id.toString())) {
+    //       return instance.post("Book.json", {
+    //         title: book.title,
+    //         author: book.author,
+    //         isbn: book.isbn,
+    //         deleted  : (0),
 
-//       try {
-//         await Promise.all(postPromises);
-//         console.log("Data posted successfully!");
-//         // Refresh data after posting
-//         await fetchData();
-//       } catch (error) {
-//         console.error("Error posting data:", error);
-//       }
-//     };
+    //       });
+    //     }
+    //     return Promise.resolve(); // Skip posting if already exists
+    //   });
 
-//     handlePost();
-//   }, [fetchedData]); // Run when fetchedData changes
+    //   try {
+    //     await Promise.all(postPromises);
+    //     console.log("Data posted successfully!");
+    //     // Refresh data after posting
+    //     await fetchData();
+    //   } catch (error) {
+    //     console.error("Error posting data:", error);
+    //   }
+    // };
+
+    // handlePost();
+  // Run when fetchedData changes
 
   
   
-
   const handleRemove = async (id) => {
     try {
+      
       await instance.delete(`/Book/${id}.json`);
       setFetchedData(prevData => prevData.filter(book => book.id !== id));
 
@@ -106,32 +108,72 @@ function ResultAdd() {
       console.error("Error deleting book:", error);
     }
   };
-  // const handlesoftDelete = async (id) => {
-  //   if (!id) {
-  //     console.log("Invalid ID");
-  //     return;
-  //   }
 
-  //   try {
-  //     await instance.put(`/Book/${id}.json`, { deleted: true });
+    
 
-  //     setFetchedData(prevData => prevData.map(book =>
-  //       book.id === id ? { ...book, deleted: true } : book
-  //     ));
-  //   } catch (error) {
-  //     console.error("Error occurred during soft delete", error);
-  //   }
-  // };
 
- 
 
+  const handleUpdate = async (bookId) => {
+    try {
+      const bookToUpdate = fetchedData.find(book => book.id === bookId);
+  
+      if (bookToUpdate) {
+        const newTitle = prompt("Enter new Title", bookToUpdate.title);
+        
+        setFetchedData(prevData =>
+          prevData.map(book =>
+            book.id === bookId ? { ...book, title: newTitle } : book
+          )
+        );
+  
+        await instance.put(`Book/${bookId}.json`, {
+          title: newTitle,
+        });
+  
+        console.log(newTitle);
+      } else {
+        console.error("Book not found");
+      }
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
+  };
+  
+
+
+
+
+  const softDelete = async (bookId) => {
+    try {
+      const bookToUpdate = fetchedData.find(book => book.id === bookId);
+  
+      if (bookToUpdate) {
+        await instance.patch(`Book/${bookId}.json`, {
+          deleted: 1,
+        });
+      } else {
+        console.error("Book not found");
+      }
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
+  };
+  
   return (
-    <div >
-      <ResultList results={fetchedData} handleRemove={handleRemove} />
+    <div className="flex justify-center items-center">
+      {fetchedData.some(element => element.deleted === 0) ? (
+        <ResultList
+          results={fetchedData.filter(element => element.deleted === 0)}
+          handleRemove={handleRemove}
+          handleUpdate={handleUpdate}
+          softDelete={softDelete}
+        />
+      ) : (
+        null
+      )}
     </div>
   );
-}
-
-export default ResultAdd;
-
-
+  }
+  
+  export default ResultAdd;
+  
